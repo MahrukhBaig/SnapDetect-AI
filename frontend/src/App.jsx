@@ -37,7 +37,7 @@ function App() {
       if (!response.ok) {
         setError(data.detail || 'Something went wrong')
       } else {
-        setResult(data.product_name)
+        setResult(data)
       }
     } catch (err) {
       setError('Could not connect to server. Please try again.')

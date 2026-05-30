@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+
+# Environment variables — API keys safe rakhna
+backend/.env
+.env
+
+# Node
+frontend/node_modules/
