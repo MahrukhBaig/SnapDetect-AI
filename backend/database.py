@@ -124,6 +124,17 @@ def fail_image_process(image_id: str, batch_id: str, error_message: str) -> None
     update_image_status(image_id, "FAILED", error_message)
     increment_batch_progress(batch_id)
 
+def update_batch_status(batch_id: str, status: str) -> dict:
+    """Updates the status of a batch."""
+    client = get_supabase_client()
+    data = {"status": status}
+    if status in ["COMPLETED", "FAILED"]:
+        data["completed_at"] = datetime.now(timezone.utc).isoformat()
+    response = client.table("batches").update(data).eq("id", batch_id).execute()
+    if not response.data:
+        raise Exception(f"Failed to update batch status: {response}")
+    return response.data[0]
+
 def get_batch_status(batch_id: str) -> dict:
     """Retrieves progress stats for a batch, including all individual image statuses."""
     client = get_supabase_client()
