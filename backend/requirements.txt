@@ -34,3 +34,5 @@ uvicorn==0.46.0
 supabase
 pandas
 openpyxl
+slowapi
+google-genai
