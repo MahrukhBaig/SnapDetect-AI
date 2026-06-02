@@ -34,6 +34,8 @@
 body {
   font-family: var(--sans);
   margin: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 /* Premium Card Hover Effect */
@@ -41,7 +43,7 @@ body {
   background-color: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  transition: transform 300ms ease, box-shadow 300ms ease;
+  transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
 }
 .premium-card:hover {
   transform: translateY(-2px);
@@ -70,21 +72,67 @@ body {
   animation: shine 4s infinite ease-in-out;
 }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* Premium KPI Cards Styling */
+.kpi-card {
+  position: relative;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+}
+.kpi-card:hover {
+  transform: translateY(-3px);
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--kpi-gradient);
+}
+
+.kpi-card-batches {
+  --kpi-gradient: linear-gradient(90deg, #6366F1, #8B5CF6);
+}
+.kpi-card-batches:hover {
+  box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.kpi-card-files {
+  --kpi-gradient: linear-gradient(90deg, #3B82F6, #06B6D4);
+}
+.kpi-card-files:hover {
+  box-shadow: 0 12px 30px -5px rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.kpi-card-success {
+  --kpi-gradient: linear-gradient(90deg, #10B981, #059669);
+}
+.kpi-card-success:hover {
+  box-shadow: 0 12px 30px -5px rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
 }
 
 @layer base {
   body {
     margin: 0;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
   }
 
   h1,
-  h2 {
+  h2,
+  h3,
+  h4 {
     font-family: var(--heading);
-    font-weight: 500;
-    color: var(--text-h);
+    font-weight: 600;
+    color: var(--text-primary);
   }
 
   h1 {
@@ -113,11 +161,11 @@ body {
     font-family: var(--mono);
     display: inline-flex;
     border-radius: 4px;
-    color: var(--text-h);
-    font-size: 15px;
+    color: var(--text-primary);
+    font-size: 14px;
     line-height: 135%;
     padding: 4px 8px;
-    background: var(--code-bg);
+    background-color: var(--bg-secondary);
   }
 }
 
@@ -133,6 +181,6 @@ body {
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
-  color: var(--text-h);
+  color: var(--text-primary);
 }
 

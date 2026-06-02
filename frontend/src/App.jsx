@@ -18,6 +18,8 @@ import {
   Check
 } from 'lucide-react'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 // ==========================================
 // ANIMATED COUNTER COMPONENT (For KPI Cards)
 // ==========================================
@@ -53,7 +55,7 @@ function AnimatedCounter({ value, duration = 800 }) {
 }
 
 export default function App() {
-  // Theme state
+  // Theme state (React useState as requested)
   const [isDark, setIsDark] = useState(true)
 
   // Data states
@@ -76,6 +78,18 @@ export default function App() {
   const [isInspectingLoading, setIsInspectingLoading] = useState(false)
   const [inspectSearch, setInspectSearch] = useState('')
 
+  // Sync theme to root html element for scrollbars and body background support
+  useEffect(() => {
+    const root = document.documentElement
+    if (isDark) {
+      root.classList.add('dark')
+      root.classList.remove('light')
+    } else {
+      root.classList.add('light')
+      root.classList.remove('dark')
+    }
+  }, [isDark])
+
   // Toast Helper
   const showToast = (message, type = 'success') => {
     const id = Math.random().toString(36).substring(2, 9)
@@ -89,13 +103,13 @@ export default function App() {
   async function fetchHistory() {
     setIsHistoryLoading(true)
     try {
-      const response = await fetch('http://localhost:8000/batches')
+      const response = await fetch(`${API_BASE_URL}/batches`)
       if (response.ok) {
         const data = await response.json()
         setHistory(data)
       }
     } catch (err) {
-      showToast('Backend history connection offline', 'error')
+      showToast('Backend connection offline', 'error')
     } finally {
       setIsHistoryLoading(false)
     }
@@ -111,7 +125,7 @@ export default function App() {
 
     const interval = setInterval(async () => {
       try {
-        const response = await fetch(`http://localhost:8000/batches/${activeBatch.id}/status`)
+        const response = await fetch(`${API_BASE_URL}/batches/${activeBatch.id}/status`)
         if (response.ok) {
           const updatedBatch = await response.json()
           setActiveBatch(updatedBatch)
@@ -143,7 +157,7 @@ export default function App() {
     setIsInspectingLoading(true)
     setInspectedBatchId(batchId)
     try {
-      const response = await fetch(`http://localhost:8000/batches/${batchId}/status`)
+      const response = await fetch(`${API_BASE_URL}/batches/${batchId}/status`)
       if (response.ok) {
         const data = await response.json()
         setInspectedBatchData(data)
@@ -163,7 +177,7 @@ export default function App() {
   function copyToClipboard(id) {
     navigator.clipboard.writeText(id)
     setCopiedId(id)
-    showToast('Batch ID copied to clipboard', 'success')
+    showToast('Batch ID copied', 'success')
     setTimeout(() => setCopiedId(null), 2000)
   }
 
@@ -204,7 +218,7 @@ export default function App() {
     })
 
     try {
-      const response = await fetch('http://localhost:8000/batches', {
+      const response = await fetch(`${API_BASE_URL}/batches`, {
         method: 'POST',
         body: formData,
       })
@@ -238,7 +252,7 @@ export default function App() {
 
   // Trigger Excel Exporter
   function handleDownloadExcel(batchId) {
-    window.open(`http://localhost:8000/batches/${batchId}/export`, '_blank')
+    window.open(`${API_BASE_URL}/batches/${batchId}/export`, '_blank')
     showToast('Spreadsheet download started', 'success')
   }
 
@@ -269,17 +283,18 @@ export default function App() {
   const showPreviews = selectedFiles.length <= 2
 
   return (
+    /* Root div toggle as requested */
     <div className={isDark ? 'dark' : 'light'}>
       <div 
-        className="min-h-screen transition-colors duration-300"
+        className="min-h-screen transition-colors duration-300 pb-12"
         style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
       >
         
-        {/* TOP NAVBAR (Frosted Glass Effect) */}
+        {/* TOP NAVBAR (Frosted Glass Effect - backdrop-filter: blur(12px)) */}
         <nav 
           className="w-full sticky top-0 z-40 px-6 py-4 flex items-center justify-between transition-colors duration-300"
           style={{ 
-            backgroundColor: isDark ? 'rgba(26, 29, 39, 0.85)' : 'rgba(255, 255, 255, 0.85)', 
+            backgroundColor: isDark ? 'rgba(26, 29, 39, 0.8)' : 'rgba(255, 255, 255, 0.8)', 
             backdropFilter: 'blur(12px)',
             borderBottom: '1px solid var(--border)'
           }}
@@ -304,7 +319,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Theme switcher */}
+          {/* Theme Toggle Button */}
           <button
             onClick={() => setIsDark(!isDark)}
             className="flex items-center justify-center p-2 rounded-lg transition-all duration-200"
@@ -318,71 +333,86 @@ export default function App() {
           </button>
         </nav>
 
-        {/* Dashboard Grid Workspace */}
+        {/* Dashboard Workspace */}
         <main className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-8">
           
-          {/* STATS CARDS (Left border accent) */}
+          {/* STATS CARDS (Premium Glassmorphic KPI Cards with Top Gradient and Subtle Hover Glows) */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1 */}
-            <div 
-              className="premium-card p-6 rounded-xl flex items-center justify-between group"
-              style={{ borderLeft: '3px solid var(--accent)' }}
-            >
+            {/* Card 1: Total Batches */}
+            <div className="kpi-card kpi-card-batches p-6 flex items-center justify-between group">
               <div className="flex flex-col">
-                <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: 'var(--text-secondary)' }}>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-450 dark:text-indigo-300" style={{ color: 'var(--text-secondary)' }}>
                   Total Batches
                 </span>
-                <p className="text-3xl font-extrabold tracking-tight mt-1">
+                <p className="text-4xl font-extrabold tracking-tight mt-2 flex items-baseline gap-1">
                   <AnimatedCounter value={totalBatches} />
+                  <span className="text-xs font-normal" style={{ color: 'var(--text-secondary)' }}>runs</span>
                 </p>
+                <span className="text-[10px] mt-2 font-medium" style={{ color: 'var(--text-secondary)' }}>
+                  Active & completed pipelines
+                </span>
               </div>
               <div 
-                className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors"
-                style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+                className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                style={{ 
+                  backgroundColor: 'rgba(99, 102, 241, 0.1)', 
+                  border: '1px solid rgba(99, 102, 241, 0.2)', 
+                  color: '#6366F1' 
+                }}
               >
-                <Layers className="w-4 h-4" />
+                <Layers className="w-5 h-5" />
               </div>
             </div>
 
-            {/* Card 2 */}
-            <div 
-              className="premium-card p-6 rounded-xl flex items-center justify-between group"
-              style={{ borderLeft: '3px solid var(--accent)' }}
-            >
+            {/* Card 2: Files Processed */}
+            <div className="kpi-card kpi-card-files p-6 flex items-center justify-between group">
               <div className="flex flex-col">
-                <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: 'var(--text-secondary)' }}>
+                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
                   Files Processed
                 </span>
-                <p className="text-3xl font-extrabold tracking-tight mt-1">
+                <p className="text-4xl font-extrabold tracking-tight mt-2 flex items-baseline gap-1">
                   <AnimatedCounter value={totalFiles} />
+                  <span className="text-xs font-normal" style={{ color: 'var(--text-secondary)' }}>images</span>
                 </p>
+                <span className="text-[10px] mt-2 font-medium" style={{ color: 'var(--text-secondary)' }}>
+                  Total structured extractions
+                </span>
               </div>
               <div 
-                className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors"
-                style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+                className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                style={{ 
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)', 
+                  border: '1px solid rgba(59, 130, 246, 0.2)', 
+                  color: '#3B82F6' 
+                }}
               >
-                <ScanLine className="w-4 h-4" />
+                <ScanLine className="w-5 h-5" />
               </div>
             </div>
 
-            {/* Card 3 */}
-            <div 
-              className="premium-card p-6 rounded-xl flex items-center justify-between group"
-              style={{ borderLeft: '3px solid var(--accent)' }}
-            >
+            {/* Card 3: Success Rate */}
+            <div className="kpi-card kpi-card-success p-6 flex items-center justify-between group">
               <div className="flex flex-col">
-                <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: 'var(--text-secondary)' }}>
+                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
                   Success Rate
                 </span>
-                <p className="text-3xl font-extrabold tracking-tight text-emerald-500 mt-1">
-                  <AnimatedCounter value={successRate} />%
+                <p className="text-4xl font-extrabold tracking-tight text-emerald-500 mt-2 flex items-baseline gap-0.5">
+                  <AnimatedCounter value={successRate} />
+                  <span className="text-lg font-semibold text-emerald-500">%</span>
                 </p>
+                <span className="text-[10px] mt-2 font-medium" style={{ color: 'var(--text-secondary)' }}>
+                  Accurate data extractions
+                </span>
               </div>
               <div 
-                className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors"
-                style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+                className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                style={{ 
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)', 
+                  border: '1px solid rgba(16, 185, 129, 0.2)', 
+                  color: '#10B981' 
+                }}
               >
-                <TrendingUp className="w-4 h-4" />
+                <TrendingUp className="w-5 h-5" />
               </div>
             </div>
           </section>
@@ -400,7 +430,7 @@ export default function App() {
                   className="text-left mb-6 pb-4"
                   style={{ borderBottom: '1px solid var(--border)' }}
                 >
-                  <h2 className="text-xs font-bold uppercase tracking-wider">
+                  <h2 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>
                     New Upload Job
                   </h2>
                   <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
@@ -432,7 +462,7 @@ export default function App() {
                     
                     <div className="flex justify-center mb-3">
                       <Upload 
-                        className="w-8 h-8 transition-transform duration-300"
+                        className="w-8 h-8 transition-transform duration-350"
                         style={{ color: isDragging ? 'var(--accent)' : 'var(--text-secondary)' }}
                       />
                     </div>
