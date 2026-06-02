@@ -90,4 +90,4 @@ SnapDetect AI is a premium, enterprise-grade B2B SaaS dashboard designed to extr
    ```bash
    npm run dev
    ```
-4. Access the dashboard in your browser at `http://localhost:5173/`.
+4. Access the dashboard in your browser at `https://snapdetect-ai.vercel.app`.
