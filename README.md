@@ -91,9 +91,3 @@ SnapDetect AI is a premium, enterprise-grade B2B SaaS dashboard designed to extr
    npm run dev
    ```
 4. Access the dashboard in your browser at `http://localhost:5173/`.
-
----
-
-## 🚀 Cloud Deployment
-
-For full cloud setup, including hosting on **Vercel** (Frontend) and **Railway/Render** (Backend), please follow the step-by-step instructions in the [DEPLOYMENT.md](file:///c:/Projects/SnapDetect-AI/DEPLOYMENT.md) guide.
