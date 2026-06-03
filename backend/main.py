@@ -22,18 +22,10 @@ app = FastAPI(title="SnapDetect AI API")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# CORS setup — allow connections from local Vite frontend and production deployments
-origins = ["http://localhost:5173", "http://localhost:5174"]
-frontend_url = os.getenv("FRONTEND_URL")
-if frontend_url:
-    origins.append(frontend_url)
-else:
-    origins.append("*")
-
+# CORS setup — allow connections from any origin for reliable cloud integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
