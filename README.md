@@ -48,7 +48,7 @@ SnapDetect AI is an enterprise-grade, serverless AI system designed to extract s
 
 * **🎨 Theme Toggle (Dark & Light Mode):** Fully functional, smooth-transitioning theme system that styles the global background, cards, tables, and browser scrollbars using root-synced CSS variables.
 * **📈 Prominent KPI Analytics:** Metrics cards for **Total Batches**, **Files Processed**, and **Success Rate** styled with top-gradient borders, metric badges, and dynamic count-up animations on load.
-* **📤 Drag & Drop Upload Handler:** High-fidelity upload box with drop-states. Small uploads ($\le 2$ images) show high-res previews with removal controls; large queues ($\ge 3$ images) collapse to a summary badge to keep the layout neat.
+* **📤 Drag & Drop Upload Handler:** High-fidelity upload box with drop-states. Small uploads (≤ 2 images) show high-res previews with removal controls; large queues (≥ 3 images) collapse to a summary badge to keep the layout neat.
 * **🔍 Stripe-Style Inspect Drawer:** Slide-out details panel that displays real-time execution statistics, file-specific progress state logs, error messages, and a dynamic database search bar.
 * **📋 Clipboard Helper:** Interactive clipboard helper that displays monospace Batch IDs with copy buttons appearing automatically on hover.
 * **✨ Shine-Animated Excel Exporters:** Green download triggers featuring custom CSS shimmer animations that download consolidated spreadsheets on click.
