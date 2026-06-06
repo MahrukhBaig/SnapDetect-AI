@@ -98,3 +98,9 @@ SnapDetect AI is an enterprise-grade, serverless AI system designed to extract s
    ```bash
    npm run dev
    ```
+
+---
+
+## 👤 Author
+
+* **Mahrukh Baig** - *Lead Engineer / Developer* - [@MahrukhBaig](https://github.com/MahrukhBaig)
