@@ -1,49 +1,44 @@
-# SnapDetect AI — Intelligent Packaging Details Extractor
+# ⚡ SnapDetect AI: Asynchronous B2B SaaS OCR Engine for Packaging Metadata Extraction
 
-SnapDetect AI is a premium, enterprise-grade B2B SaaS dashboard designed to extract structured nutritional and retail metadata from product packaging images. Powered by **FastAPI** (Python) and **React** (Vite), it integrates **Google Gemini 2.5 Flash** for high-accuracy structured visual analysis and **Supabase (PostgreSQL)** for secure database storage.
-
----
-
-## 🎨 Premium User Experience & Features
-
-### 1. Striking B2B SaaS Design Language
-* **Linear & Stripe Inspired:** Minimalist, sleek borders, custom geometric layouts, and frosted glass components.
-* **SVG-Driven UI:** Clean vector illustrations and iconography using the **Lucide React** library.
-* **Integrated Theme System:** Toggle between deep slate dark mode and clean white light mode with a smooth `300ms` CSS transition. The theme class syncs directly to the `html` root node for clean browser scrollbars and global body background transitions.
-
-### 2. Prominent Analytics KPIs
-* **Metric Cards:** Total Batches, Files Processed, and overall Success Rate.
-* **High-Fidelity Touches:** Beautiful top-gradient accent borders, color-coded custom icon badges, descriptive subtext labels, and animated counters that count up on page load.
-* **Real-Time Calculation:** Automatically updates in real time as jobs progress or finish in the background.
-
-### 3. Asynchronous Batch Uploads
-* **Dropzone:** Drag-and-drop or browse files with visual dragging states and thumbnail previews.
-* **Dynamic Previews:** Displays item counts, filenames, and sizes for small queues ($\le 2$ files); collapses into a unified queue status badge for large queues ($\ge 3$ files).
-* **Decoupled Architecture (HTTP 202):** Immediate batch queuing response allows heavy AI extraction processes to run asynchronously in background thread loops without frontend freezes.
-
-### 4. Interactive Inspection Drawer
-* **Sliding Details Panel:** Clicking **Inspect** on any historical run slides out a detailed B2B drawer showing progress status, metric summaries, and a filterable search table of individual files.
-* **Clipboard Helper:** Monospace Batch IDs with quick copy-to-clipboard buttons on hover.
-* **Status Badges:** Color-coded status pills representing `PROCESSING`, `COMPLETED`, or `FAILED` runs.
-
-### 5. Multi-Tab Excel Reports
-* **Consolidated Data:** Downloads a professionally formatted `.xlsx` spreadsheet directly from the dashboard.
-* **Data Pipelines:** Merges files, image paths, timestamps, and structured JSON fields into custom worksheets.
+SnapDetect AI is an enterprise-grade, serverless AI system designed to extract structured nutritional specs and ingredient metadata from product packaging images. By combining **FastAPI (Python)**, **React (Vite)**, **Google Gemini 2.5 Flash**, and **Supabase (PostgreSQL)**, the platform establishes a high-performance, asynchronous pipeline for automated retail data ingestion.
 
 ---
 
-## 🏗️ Architecture & Data Flow
+## 🔗 Live Production Gateway
+
+👉 🚀 **[Live Dashboard Gateway](https://snapdetect-ai.vercel.app)**
+
+[![Vercel Live Dashboard](https://img.shields.io/badge/Vercel-Live_Dashboard-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://snapdetect-ai.vercel.app)
+[![FastAPI Backend API](https://img.shields.io/badge/FastAPI-Backend_API-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://snapdetect-ai-production.up.railway.app)
+[![Supabase Database](https://img.shields.io/badge/Supabase-PostgreSQL_Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
+
+---
+
+## 🏗️ Production System Architecture
 
 ```
-[ React Client (Vercel) ]
-         │
-         ▼ (Fetch requests / Form Data uploads)
-[ FastAPI Backend (Railway) ]
-         │
-         ├───► [ Google Gemini 2.5 Flash ] ───► (Structured JSON extraction)
-         │
-         └───► [ Supabase PostgreSQL ] ────► (Metadata & transaction storage)
+[ React Client (Vercel CDN) ]
+             │
+             ▼ (Async REST Requests / Multipart Form Upload)
+   [ FastAPI Backend (Railway Server) ]
+             │
+             ├───► [ Google Gemini 2.5 Flash API ] ───► (OCR & Semantic Schema Parsing)
+             │
+             └───► [ Supabase PostgreSQL ] ──────────► (Transaction Logs & Details)
 ```
+
+1. **Instant Queue (HTTP 202):** Image uploads are processed asynchronously in background worker threads, returning a tracking ID immediately to prevent request timeouts.
+2. **Strict Schema Enforcement:** Gemini's vision model is restricted to a Pydantic output schema, guaranteeing 100% valid database insertions.
+3. **In-Memory Streams:** Excel reports are generated on-the-fly in a `BytesIO` buffer and streamed directly, preventing server disk space bloat.
+
+---
+
+## 🎨 Key Core Features
+
+* **Linear-Grade Interface:** Sleek glassmorphism layouts, clean micro-interactions, and zero emojis in the dashboard UI.
+* **Smart Upload Queue:** Displays thumbnail previews with removal controls for $\le 2$ images, collapsing into a queue count status badge for $\ge 3$ images.
+* **Stripe-Style Details Drawer:** Click **Inspect** to slide out a side drawer showing real-time batch statistics and search-filterable records.
+* **Premium Theme Selector:** Toggles smooth light and dark modes via root-synced CSS variables.
 
 ---
 
@@ -54,25 +49,25 @@ SnapDetect AI is a premium, enterprise-grade B2B SaaS dashboard designed to extr
    ```bash
    cd backend
    ```
-2. Create a virtual environment and activate it:
+2. Create and activate a Python virtual environment:
    ```bash
    python -m venv venv
-   # On Windows:
+   # Windows:
    venv\Scripts\activate
-   # On Mac/Linux:
+   # Mac/Linux:
    source venv/bin/activate
    ```
 3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-4. Create a `.env` file in the `backend/` folder:
+4. Configure your `.env` variables:
    ```env
    SUPABASE_URL=your_supabase_url
    SUPABASE_KEY=your_supabase_service_role_key
    GEMINI_API_KEY=your_gemini_api_key
    ```
-5. Run the FastAPI development server:
+5. Run the dev server:
    ```bash
    uvicorn main:app --reload --port 8000
    ```
@@ -86,8 +81,7 @@ SnapDetect AI is a premium, enterprise-grade B2B SaaS dashboard designed to extr
    ```bash
    npm install
    ```
-3. Start the Vite dev server:
+3. Run the Vite development server:
    ```bash
    npm run dev
    ```
-4. Access the dashboard in your browser at `https://snapdetect-ai.vercel.app`.
