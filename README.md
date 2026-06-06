@@ -33,6 +33,17 @@ SnapDetect AI is an enterprise-grade, serverless AI system designed to extract s
 
 ---
 
+## ⚙️ Core Tech Stack
+
+* **Frontend:** React (Vite), Tailwind CSS (Base), CSS Variables (Theme System), Lucide Icons
+* **Backend:** FastAPI (Python), Uvicorn, SlowAPI (Rate Limiting)
+* **Database:** Supabase (PostgreSQL)
+* **AI Model:** Google Gemini 2.5 Flash API (Pydantic Response Schemas)
+* **Report Engine:** Pandas, OpenPyXL
+* **Hosting:** Vercel (Frontend), Railway (Backend)
+
+---
+
 ## 🎨 Key Core Features
 
 * **Linear-Grade Interface:** Sleek glassmorphism layouts, clean micro-interactions, and zero emojis in the dashboard UI.
